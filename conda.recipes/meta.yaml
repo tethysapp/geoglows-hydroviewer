@@ -1,0 +1,41 @@
+{% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
+{% set name = data.get('name')|replace("tethysapp-", "")|lower %}
+
+package:
+  name: {{ name }}
+  version: {{ data.get('version') }}
+
+about:
+  author: {{ data.get('author')}}
+  description: {{ data.get('description')}}
+  license: "{'name': 'release_package', 'version': '1.9', 'description': 'GUI for the GEOGloWS ECMWF Streamflow model', 'long_description': 'Contains an interactive map for viewing modeled streamflow using the GEOGloWS data and mapping ', 'author': 'Riley Hales', 'author_email': '', 'url': 'https://geoglows.ecmwf.int', 'license': 'BSD 3-Clause Clear', 'tethys_version': '>=4.0.0'}"
+  dev_url: {{ data.get('url') }}
+
+outputs:
+  - name: {{ name }}
+extra:
+  author_email: ''
+  keywords:
+  - geoglows
+  - ecmwf
+  - streamflow
+  recipe-maintainers:
+  - TethysAppWarehouse
+
+build:
+  noarch: python
+  preserve_egg_dir: true
+  script: python setup.py install --record=record.txt
+requirements:
+  build:
+  - python
+  run:
+  - geoglows>=0.20
+  - xmltodict
+  - pandas
+  - requests
+  - geopandas
+  - jinja2
+  - hs_restclient
+source:
+  path: ..
